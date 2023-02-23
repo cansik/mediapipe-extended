@@ -15,4 +15,9 @@ python examples/FaceGeometryExample.py
 
 ### Build
 
+#### MacOS Apple Silicon
+```bash
+pwsh tools/build.ps1 -IsAppleSilicon
+```
+
 ### About
