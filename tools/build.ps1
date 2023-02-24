@@ -32,6 +32,16 @@ function Create-Dir-If-Needed([string]$Path) {
     }
 }
 
+function Find-File-Or-Exit([string]$Path, [string]$ErrorMessage = "") {
+    [array]$files = Get-ChildItem $Path
+    if ($files.Length -eq 0)
+    {
+        Write-Host -ForegroundColor Red "Could not find a file matching '$Path'. $ErrorMessage"
+        exit 1
+    }
+    return $files[0]
+}
+
 # resolve paths
 $BuildPath = Try-Resolve-Path $BuildPath
 $DistPath = Try-Resolve-Path $DistPath
@@ -80,6 +90,10 @@ elseif ($IsWindows)
     choco install -y bazelisk protoc
 
     $WinOpenCVBuildPath = Join-Path $BuildPath "opencv_win_build"
+    choco install opencv --version=3.4.10 "/InstallationPath:$WinOpenCVBuildPath"
+
+    Write-Host "OpenCV Installation Directory:"
+    ls $WinOpenCVBuildPath
 }
 elseif ($IsLinux)
 {
@@ -172,13 +186,7 @@ else
 Push-Location "dist"
 
 # find wheel file
-[array]$wheels = Get-ChildItem "*.whl"
-if ($wheels.Length -eq 0)
-{
-    Write-Host -ForegroundColor Red "Could not find wheel in dist folder. Please, check if build did not work!"
-    exit 1
-}
-$WheelFile = $wheels[0]
+$WheelFile = Find-File-Or-Exit -Path "*.whl" -ErrorMessage "Please check if build did work."
 
 # post-process wheel
 if ($IsMacOS)
@@ -191,7 +199,14 @@ elseif ($IsWindows)
 }
 elseif ($IsLinux)
 {
-    # todo: Use auditwheel repair
+    # repaire wheel
+    auditwheel repair $wheel_file --plat manylinux_2_27_x86_64 -w "."
+
+    # remove original wheel
+    Remove-Item -Path $WheelFile -Force
+
+    # find repaired wheel
+    $WheelFile = Find-File-Or-Exit -Path "*.whl" -ErrorMessage "Please check if auditwheel did work."
 }
 
 # copy file to dist
