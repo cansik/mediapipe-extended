@@ -116,8 +116,11 @@ if (-Not$SkipRepositorySetup)
 
     if ($IsWindows)
     {
+        $EscapedWinOpenCVBuildPath = $WinOpenCVBuildPath.Replace("\", "\\")
+        Write-Host "Escaped OpenCV Build Path: $EscapedWinOpenCVBuildPath"
+
         Replace-In-File -InputFile "WORKSPACE" -Tokens @{
-            "C:\\opencv\\build" = "$WinOpenCVBuildPath";
+            "C:\\opencv\\build" = "$EscapedWinOpenCVBuildPath";
         }
     }
 
