@@ -3,9 +3,11 @@ param(
     [string]$PackageVersion = "0.9.1",
     [string]$BuildPath = "./build",
     [string]$DistPath = "./dist",
+    [string]$LibPath = "./libs",
     [string]$MediaPipeRepository = "https://github.com/cansik/mediapipe.git",
     [string]$MediaPipeBranch = "face-geometry-python",
-    [switch]$SkipRepositorySetup = $False
+    [switch]$SkipRepositorySetup = $False,
+    [switch]$OnlyInstallDependencies = $False
 )
 
 function Replace-In-File([string]$InputFile, $Tokens)
@@ -45,6 +47,7 @@ function Find-File-Or-Exit([string]$Path, [string]$ErrorMessage = "") {
 # resolve paths
 $BuildPath = Try-Resolve-Path $BuildPath
 $DistPath = Try-Resolve-Path $DistPath
+$LibPath = Try-Resolve-Path $LibPath
 
 # Global variables
 $BDistPlatformName = ""
@@ -56,6 +59,18 @@ Write-Host -ForegroundColor Blue "building $PackageName in $BuildPath..."
 
 # install os specific pre-requisites and set path
 $env:GLOG_logtostderr = 1
+
+# create lib path
+Create-Dir-If-Needed -Path $LibPath
+
+# clean build path if necessary
+if (-Not$SkipRepositorySetup)
+{
+    if (Test-Path $BuildPath)
+    {
+        Remove-Item -Recurse -Force -Path $BuildPath
+    }
+}
 
 if ($IsMacOS)
 {
@@ -86,14 +101,12 @@ if ($IsMacOS)
 }
 elseif ($IsWindows)
 {
-    choco install -y --force bazel --version=5.1.0
+    # choco install -y --force bazel --version=5.1.0
     choco install -y bazelisk protoc
-
-    $WinOpenCVBuildPath = Join-Path $BuildPath "win_tools"
-    choco install opencv --version=3.4.10 --params="/InstallationPath:$WinOpenCVBuildPath"
+    choco install opencv --version=3.4.10 --params="/InstallationPath:$LibPath"
 
     # extend path with zip folder name
-    $WinOpenCVBuildPath = Join-Path $WinOpenCVBuildPath "opencv/build"
+    $WinOpenCVBuildPath = Join-Path $LibPath "opencv/build"
 
     # add opencv to environment variables
     $env:OPENCV_DIR = Join-Path $WinOpenCVBuildPath "bin"
@@ -113,14 +126,14 @@ elseif ($IsLinux)
     pip install auditwheel
 }
 
-# clean build path if necessary
+if ($OnlyInstallDependencies) {
+    Write-Host -ForegroundColor Blue "Installed dependencies only. Now exiting build script!"
+    exit 0
+}
+
+
 if (-Not$SkipRepositorySetup)
 {
-    if (Test-Path $BuildPath)
-    {
-        Remove-Item -Recurse -Force -Path $BuildPath
-    }
-
     # clone repository to build
     git clone --recurse-submodules --shallow-submodules --depth 1 --branch $MediaPipeBranch $MediaPipeRepository $BuildPath
 }

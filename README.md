@@ -37,7 +37,11 @@ python examples/NeutralFaceLandmarkExample.py
 ```
 
 ### Build
-To create a wheel package, set up your computer as described in [Mediapipe: Getting Started](https://google.github.io/mediapipe/getting_started/python.html#mediapipe-python-framework) and run the following command (Powershell Core is required).
+To create a wheel package, set up your computer as described in [Mediapipe: Getting Started](https://google.github.io/mediapipe/getting_started/python.html#mediapipe-python-framework) and run the following command (Powershell Core is required). Please use a more recent version of powershell (e.g. `PowerShell 7.3.2`) and install the following dependency managers for your system:
+
+- Windows -> [Chocolately](https://chocolatey.org/)
+- Linux -> apt
+- MacOS -> [Homebrew](https://brew.sh/)
 
 ```bash
 pwsh tools/build.ps1
