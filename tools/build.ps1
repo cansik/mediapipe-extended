@@ -31,7 +31,8 @@ $DistPath = Try-Resolve-Path $DistPath
 
 # Global variables
 $BDistPlatformName = ""
-$IsMacOSArm64 = $IsMacOS -And ($(arch) -eq "arm64")
+$IsMacOSArm64 = $IsMacOS -And ($( arch ) -eq "arm64")
+$LinkOpenCV = $False
 
 Write-Host -ForegroundColor Blue "Mediapipe Build Script"
 Write-Host -ForegroundColor Blue "building $PackageName in $BuildPath..."
@@ -48,6 +49,7 @@ if ($IsMacOS)
 
     $BrewPrefix = $( brew --prefix )
     $OpenCVPrefix = $( brew --prefix opencv@3 )
+    $LinkOpenCV = $true
 
     Write-Host -ForegroundColor Green "Found brew at $BrewPrefix"
     Write-Host -ForegroundColor Green "Found opencv@3 at $OpenCVPrefix"
@@ -65,18 +67,16 @@ if ($IsMacOS)
 }
 elseif ($IsWindows)
 {
-    choco install -y --force bazel --version=3.5.0
+    choco install -y --force bazel --version=5.1.0
     choco install -y bazelisk protoc
+
+    $WinOpenCVBuildPath = Join-Path $BuildPath "opencv_win_build"
 }
 elseif ($IsLinux)
 {
-
+    sudo apt install -y protobuf-compiler
+    sudo apt install cmake
 }
-
-# install pre-requisites
-pip install wheel
-pip install six
-pip install numpy
 
 # clean build path if necessary
 if (-Not$SkipRepositorySetup)
@@ -92,6 +92,11 @@ if (-Not$SkipRepositorySetup)
 
 Push-Location $BuildPath
 
+# install pre-requisites
+pip install wheel
+pip install six
+pip install -r requirements.txt
+
 if (-Not$SkipRepositorySetup)
 {
     # rename project and setup workspace
@@ -102,12 +107,22 @@ if (-Not$SkipRepositorySetup)
 
     if ($IsMacOS)
     {
-        Replace-In-File -InputFile "setup.py" -Tokens @{
-            "self.link_opencv = False" = "self.link_opencv = True";
-        }
-
         Replace-In-File -InputFile "WORKSPACE" -Tokens @{
             "/usr/local" = "$BrewPrefix";
+        }
+    }
+
+    if ($IsWindows)
+    {
+        Replace-In-File -InputFile "WORKSPACE" -Tokens @{
+            "C:\\opencv\\build" = "$WinOpenCVBuildPath";
+        }
+    }
+
+    if ($LinkOpenCV)
+    {
+        Replace-In-File -InputFile "setup.py" -Tokens @{
+            "self.link_opencv = False" = "self.link_opencv = True";
         }
     }
 }
@@ -119,6 +134,12 @@ if (Test-Path "dist")
 }
 
 # build
+if ($IsLinux -And -Not$LinkOpenCV)
+{
+    Write-Host -BackgroundColor Blue "setting up opencv..."
+    sh ./setup_opencv.sh
+}
+
 python setup.py gen_protos
 if ($BDistPlatformName -eq "")
 {
