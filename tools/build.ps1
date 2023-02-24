@@ -219,13 +219,13 @@ elseif ($IsWindows)
 elseif ($IsLinux)
 {
     # repaire wheel
-    auditwheel repair $WheelFile -w "."
+    # auditwheel repair $WheelFile -w "."
 
     # remove original wheel
-    Remove-Item -Path $WheelFile -Force
+    # Remove-Item -Path $WheelFile -Force
 
     # find repaired wheel
-    $WheelFile = Find-File-Or-Exit -Path "*.whl" -ErrorMessage "Please check if auditwheel did work."
+    # $WheelFile = Find-File-Or-Exit -Path "*.whl" -ErrorMessage "Please check if auditwheel did work."
 }
 
 # copy file to dist
