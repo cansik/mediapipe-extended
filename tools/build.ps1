@@ -81,7 +81,7 @@ if (-Not$SkipRepositorySetup)
 {
     if (Test-Path $BuildPath)
     {
-        Remove-Item -Recurse -Force $BuildPath
+        Remove-Item -Recurse -Force -Path $BuildPath
     }
 
     # clone repository to build
@@ -111,7 +111,10 @@ if (-Not$SkipRepositorySetup)
 }
 
 # clear dist
-Remove-Item -Path "dist/*.whl" -Force
+if (Test-Path "dist")
+{
+    Remove-Item -Path "dist/*.whl" -Force
+}
 
 # build
 python setup.py gen_protos
