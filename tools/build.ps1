@@ -90,7 +90,9 @@ elseif ($IsWindows)
     choco install -y bazelisk protoc
 
     $WinOpenCVBuildPath = Join-Path $BuildPath "opencv_win_build"
-    choco install opencv --version=3.4.10 "/InstallationPath:$WinOpenCVBuildPath"
+    choco install opencv --version=3.4.10 --params="/InstallationPath:$WinOpenCVBuildPath"
+
+    Update-SessionEnvironment
 
     Write-Host "OpenCV Installation Directory:"
     ls $WinOpenCVBuildPath
