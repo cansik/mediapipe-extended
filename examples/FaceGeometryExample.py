@@ -37,10 +37,6 @@ def main():
 
     # For webcam input:
     drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=1)
-    mp_face_mesh = mp.solutions.face_mesh_with_geometry
-
-    # For webcam input:
-    drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=1)
     cap = cv2.VideoCapture("media/video-480.mov")
 
     with mp_face_mesh.FaceMeshWithGeometry(
