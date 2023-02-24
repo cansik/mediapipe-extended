@@ -65,7 +65,7 @@ if ($IsMacOS)
 }
 elseif ($IsWindows)
 {
-
+    choco install -y bazel protoc
 }
 elseif ($IsLinux)
 {
@@ -75,6 +75,7 @@ elseif ($IsLinux)
 # install pre-requisites
 pip install wheel
 pip install six
+pip install numpy
 
 # clean build path if necessary
 if (-Not$SkipRepositorySetup)
