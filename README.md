@@ -21,7 +21,7 @@ python examples/FaceGeometryExample.py
 ```
 
 ### Build
-To create a wheel package, set up your computer as described in [Mediapipe: Getting_Started](https://google.github.io/mediapipe/getting_started/python.html#mediapipe-python-framework) and run the following command (Powershell Core is required).
+To create a wheel package, set up your computer as described in [Mediapipe: Getting Started](https://google.github.io/mediapipe/getting_started/python.html#mediapipe-python-framework) and run the following command (Powershell Core is required).
 
 ```bash
 pwsh tools/build.ps1
