@@ -93,12 +93,12 @@ elseif ($IsWindows)
     choco install opencv --version=3.4.10 --params="/InstallationPath:$WinOpenCVBuildPath"
 
     # extend path with zip folder name
-    $WinOpenCVBuildPath = Join-Path $WinOpenCVBuildPath "opencv"
+    $WinOpenCVBuildPath = Join-Path $WinOpenCVBuildPath "opencv/build"
 
     # add opencv to environment variables
     $env:OPENCV_DIR = Join-Path $WinOpenCVBuildPath "bin"
 
-    Write-Host "OpenCV Installation Directory:"
+    Write-Host "OpenCV Installation Directory ($WinOpenCVBuildPath):"
     ls $WinOpenCVBuildPath
 }
 elseif ($IsLinux)
