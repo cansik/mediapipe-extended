@@ -65,7 +65,8 @@ if ($IsMacOS)
 }
 elseif ($IsWindows)
 {
-    choco install -y bazel protoc
+    choco install -y --force bazel --version=3.5.0
+    choco install -y bazelisk protoc
 }
 elseif ($IsLinux)
 {
