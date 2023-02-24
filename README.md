@@ -9,7 +9,11 @@ pip install -r requirements.txt
 pip install https://github.com/cansik/mediapipe-extended/releases/download/v0.9.1/mediapipe_extended-0.9.1-cp39-cp39-macosx_12_0_arm64.whl
 ```
 
-⚠️ At the moment only MacOS Arm64 wheel package for Python `3.9` is pre-built. MacOS Intel, Windows and Linux support is coming soon.
+⚠️ At the moment only the following packages have been [prebuilt](https://github.com/cansik/mediapipe-extended/releases/tag/v0.9.1). Support for all major platforms like Windows, MacOS and Linux is coming soon.
+
+- Python `3.9`
+  - MacOS arm64
+  - Linux x86-x64
 
 ### Face Geometry
 The Face Geometry solution allows the head transformation matrix to be recovered from the landmark detection. This enables face effects or undistorted landmark analysis.
