@@ -77,7 +77,10 @@ elseif ($IsWindows)
 elseif ($IsLinux)
 {
     sudo apt install -y protobuf-compiler
-    sudo apt install cmake
+    sudo apt install -y cmake
+    sudo apt install -y python3-dev
+
+    pip install auditwheel
 }
 
 # clean build path if necessary
@@ -177,7 +180,7 @@ elseif ($IsWindows)
 }
 elseif ($IsLinux)
 {
-
+    # todo: Use auditwheel repair
 }
 
 # copy file to dist
