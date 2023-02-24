@@ -206,7 +206,7 @@ elseif ($IsWindows)
 elseif ($IsLinux)
 {
     # repaire wheel
-    auditwheel repair $wheel_file --plat manylinux_2_27_x86_64 -w "."
+    auditwheel repair $WheelFile --plat manylinux_2_27_x86_64 -w "."
 
     # remove original wheel
     Remove-Item -Path $WheelFile -Force
