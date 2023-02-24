@@ -14,10 +14,22 @@ pip install https://github.com/cansik/mediapipe-extended/releases/download/v0.9.
 ### Face Geometry
 The Face Geometry solution allows the head transformation matrix to be recovered from the landmark detection. This enables face effects or undistorted landmark analysis.
 
+#### Augmented Reality
+Project filters onto the face by using the geometry information.
+
 ![Face Geometry Example](media/face-geometry-recording.gif)
 
 ```bash
 python examples/FaceGeometryExample.py
+```
+
+#### Measure Distance
+Measure distances between landmarks without the perspective distortion.
+
+![Face Geometry Example](media/neutral-face.gif)
+
+```bash
+python examples/NeutralFaceLandmarkExample.py
 ```
 
 ### Build

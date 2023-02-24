@@ -2,6 +2,7 @@ import cv2
 import mediapipe as mp
 import numpy as np
 import open3d as o3d
+from open3d.cpu.pybind.visualization import RenderOption
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
@@ -12,6 +13,9 @@ class Preview:
     def __init__(self):
         self.vis = o3d.visualization.Visualizer()
         self.vis.create_window(height=720, width=720)
+        render_options: RenderOption = self.vis.get_render_option()
+        render_options.point_size = 5
+        render_options.background_color = [0, 0, 0]
 
         self.pcd = o3d.geometry.PointCloud()
         points = np.random.rand(10, 3)
