@@ -80,6 +80,9 @@ elseif ($IsLinux)
     sudo apt install -y cmake
     sudo apt install -y python3-dev
 
+    sudo apt-get install -y libopencv-core-dev libopencv-highgui-dev libopencv-calib3d-dev libopencv-features2d-dev libopencv-imgproc-dev libopencv-video-dev
+    sudo apt-get install -y libopencv-contrib-dev
+
     pip install auditwheel
 }
 
