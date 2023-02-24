@@ -56,7 +56,9 @@ if ($IsMacOS)
 
     if ($IsMacOSArm64)
     {
-        $BDistPlatformName = "macosx-12.0-arm64"
+        $BDistPlatformName = "macosx-12_0-arm64"
+    } else {
+        $BDistPlatformName = "macosx_12_0_x86_64"
     }
 
     # setting local opencv variables
