@@ -5,7 +5,6 @@ param(
     [string]$DistPath = "./dist",
     [string]$MediaPipeRepository = "https://github.com/cansik/mediapipe.git",
     [string]$MediaPipeBranch = "face-geometry-python",
-    [switch]$IsAppleSilicon = $False,
     [switch]$SkipRepositorySetup = $False
 )
 
@@ -32,6 +31,7 @@ $DistPath = Try-Resolve-Path $DistPath
 
 # Global variables
 $BDistPlatformName = ""
+$IsMacOSArm64 = $IsMacOS -And ($(arch) -eq "arm64")
 
 Write-Host -ForegroundColor Blue "Mediapipe Build Script"
 Write-Host -ForegroundColor Blue "building $PackageName in $BuildPath..."
@@ -46,16 +46,22 @@ if ($IsMacOS)
 
     pip install delocate
 
-    $BDistPlatformName = "macosx-12.0-arm64"
+    $BrewPrefix = $( brew --prefix )
+    $OpenCVPrefix = $( brew --prefix opencv@3 )
 
-    if ($IsAppleSilicon)
+    Write-Host -ForegroundColor Green "Found brew at $BrewPrefix"
+    Write-Host -ForegroundColor Green "Found opencv@3 at $OpenCVPrefix"
+
+    if ($IsMacOSArm64)
     {
-        # setting local opencv variables
-        $env:PATH = "/opt/homebrew/opt/opencv@3/bin:$( $env:PATH )"
-        $env:LDFLAGS = "-L/opt/homebrew/opt/opencv@3/lib"
-        $env:CPPFLAGS = "-I/opt/homebrew/opt/opencv@3/include"
-        $env:PKG_CONFIG_PATH = "/opt/homebrew/opt/opencv@3/lib/pkgconfig"
+        $BDistPlatformName = "macosx-12.0-arm64"
     }
+
+    # setting local opencv variables
+    $env:PATH = "$OpenCVPrefix/bin:$( $env:PATH )"
+    $env:LDFLAGS = "-L$OpenCVPrefix/lib"
+    $env:CPPFLAGS = "-I$OpenCVPrefix/include"
+    $env:PKG_CONFIG_PATH = "$OpenCVPrefix/lib/pkgconfig"
 }
 elseif ($IsWindows)
 {
@@ -98,11 +104,8 @@ if (-Not$SkipRepositorySetup)
             "self.link_opencv = False" = "self.link_opencv = True";
         }
 
-        if ($IsAppleSilicon)
-        {
-            Replace-In-File -InputFile "WORKSPACE" -Tokens @{
-                "/usr/local" = "/opt/homebrew/";
-            }
+        Replace-In-File -InputFile "WORKSPACE" -Tokens @{
+            "/usr/local" = "$BrewPrefix";
         }
     }
 }
@@ -158,4 +161,5 @@ Copy-Item -Force $WheelFile -Destination $OutputPath
 Pop-Location
 Pop-Location
 
+Write-Host -ForegroundColor Green "Wheel created at: $OutputPath"
 Write-Host -ForegroundColor Blue "Done!"
