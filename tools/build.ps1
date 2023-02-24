@@ -25,6 +25,13 @@ function Try-Resolve-Path([string]$Path)
     return $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Path)
 }
 
+function Create-Dir-If-Needed([string]$Path) {
+    if (!(Test-Path $Path))
+    {
+        New-Item -Path $Path -ItemType Directory
+    }
+}
+
 # resolve paths
 $BuildPath = Try-Resolve-Path $BuildPath
 $DistPath = Try-Resolve-Path $DistPath
@@ -122,6 +129,7 @@ if (-Not$SkipRepositorySetup)
 
     if ($IsWindows)
     {
+        Create-Dir-If-Needed -Path $WinOpenCVBuildPath
         $EscapedWinOpenCVBuildPath = $WinOpenCVBuildPath.Replace("\", "\\")
         Write-Host "Escaped OpenCV Build Path: $EscapedWinOpenCVBuildPath"
 
@@ -187,11 +195,7 @@ elseif ($IsLinux)
 }
 
 # copy file to dist
-if (!(Test-Path $DistPath))
-{
-    New-Item -Path $DistPath -ItemType Directory
-}
-
+Create-Dir-If-Needed -Path $DistPath
 $OutputPath = Join-Path $DistPath $WheelFile.Name
 Copy-Item -Force $WheelFile -Destination $OutputPath
 
