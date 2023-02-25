@@ -1,4 +1,4 @@
-# Mediapipe-Extended
+# Mediapipe-Extended [![Mediapipe Build](https://github.com/cansik/mediapipe-extended/actions/workflows/build.yml/badge.svg)](https://github.com/cansik/mediapipe-extended/actions/workflows/build.yml)
 Mediapipe for Python with extended solution support. The aim of this repository is to add [solutions](https://google.github.io/mediapipe/solutions/solutions.html) to mediapipe that are not included in the original mediapipe Python package.  This repository just provides the build script and examples for mediapipe-extended. The build script uses the [face-geometry-python](https://github.com/cansik/mediapipe/tree/face-geometry-python) branch to build the python wheel package.
 
 ### Installation
