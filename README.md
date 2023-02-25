@@ -9,8 +9,9 @@ pip install -r requirements.txt
 pip install https://github.com/cansik/mediapipe-extended/releases/download/v0.9.1/mediapipe_extended-0.9.1-cp39-cp39-macosx_12_0_arm64.whl
 ```
 
-⚠️ At the moment only the following packages have been [prebuilt](https://github.com/cansik/mediapipe-extended/releases/tag/v0.9.1). Support for all major platforms like Windows, MacOS and Linux is coming soon.
+⚠️ At the moment only the following packages have been [prebuilt](https://github.com/cansik/mediapipe-extended/releases/tag/v0.9.1). Support for all major platforms like Windows, MacOS and Linux [is coming soon](https://github.com/cansik/mediapipe-extended/actions/workflows/build.yml).
 
+- Windows amd64 (`3.9`)
 - Linux x86-x64 (`3.9`)
 - MacOS Intel (`3.9`)
 - MacOS ARM64 (`3.8`, `3.9`, `3.10`, `3.11`)
