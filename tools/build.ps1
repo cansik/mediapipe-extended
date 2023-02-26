@@ -1,6 +1,7 @@
 param(
     [string]$PackageName = "mediapipe-extended",
     [string]$PackageVersion = "0.9.1",
+    [string]$PackageUrl = "https://github.com/cansik/mediapipe-extended",
     [string]$BuildPath = "./build",
     [string]$DistPath = "./dist",
     [string]$LibPath = "./libs",
@@ -150,7 +151,8 @@ if (-Not$SkipRepositorySetup)
     # rename project and setup workspace
     Replace-In-File -InputFile "setup.py" -Tokens @{
         "name='mediapipe'" = "name='$PackageName'";
-        "__version__ = 'dev'" = "__version__ = '$PackageVersion'"
+        "__version__ = 'dev'" = "__version__ = '$PackageVersion'";
+        "url='https://github.com/google/mediapipe'" = "url='$PackageUrl'"
     }
 
     if ($IsMacOS)
