@@ -115,7 +115,7 @@ elseif ($IsWindows)
 {
     # choco install -y --force bazel --version=5.1.0
     choco install -y bazelisk protoc
-    choco install opencv --version = 3.4.10 --params = "/InstallationPath:$LibPath"
+    choco install opencv --version=3.4.10 --params="/InstallationPath:$LibPath"
 
     # extend path with zip folder name
     $WinOpenCVBuildPath = Join-Path $LibPath "opencv/build"
